@@ -12,7 +12,8 @@ import java.util.stream.Collectors;
 
 @FunctionalInterface
 public interface Methoder<T> {
-    T performAction(List<String> stringList);
+    //T performAction(List<String> stringList);
+    T performAction(ActionOnWords actionOnWords);
 
     static List<String> getParameters(ActionOnWords actionOnWords) {
         Matcher matcher = getMatcher(actionOnWords);

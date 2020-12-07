@@ -1,36 +1,38 @@
 package pl.kurs.java.service;
 
 import lombok.AllArgsConstructor;
+import org.springframework.stereotype.Component;
 import pl.kurs.java.impl.MethodProvider;
 import pl.kurs.java.model.ActionOnWords;
 import pl.kurs.java.model.ActionResponse;
 import pl.kurs.java.model.Methoder;
 
+import javax.annotation.PostConstruct;
 import java.util.HashMap;
 import java.util.Map;
 
-@AllArgsConstructor
+@Component
 public class MethodService {
 
-    private final ActionOnWords actionOnWords;
+    private final Map<String, Methoder<?>> methoderMap = new HashMap<>();
 
-    public ActionResponse<?> createResponse(){
-        Map<String, Methoder<?>> methoderMap = new HashMap<>();
-        methoderMap.put("palindromes", MethodProvider::palindromes);
+    @PostConstruct
+    public void init() {
+        methoderMap.put("palindromes", actionOnWords -> MethodProvider.palindromes(actionOnWords.getWords()));
 
-        methoderMap.put("length", stringList ->
-                MethodProvider.length(stringList, Methoder.getIntArg(0, Methoder.getParameters(actionOnWords))));
+        methoderMap.put("length", actionOnWords ->
+                MethodProvider.length(actionOnWords.getWords(), Methoder.getIntArg(0, Methoder.getParameters(actionOnWords))));
 
-        methoderMap.put("anagrams", stringList ->
-                MethodProvider.anagrams(stringList, Methoder.getStringArg(0, Methoder.getParameters(actionOnWords))));
+        methoderMap.put("anagrams", actionOnWords ->
+                MethodProvider.anagrams(actionOnWords.getWords(), Methoder.getStringArg(0, Methoder.getParameters(actionOnWords))));
 
-        methoderMap.put("longest", MethodProvider::longest);
+        methoderMap.put("longest", actionOnWords -> MethodProvider.longest(actionOnWords.getWords()));
 
-        methoderMap.put("dates", stringList ->
-                MethodProvider.dates(stringList, Methoder.getStringArg(0, Methoder.getParameters(actionOnWords))));
+        methoderMap.put("dates", actionOnWords ->
+                MethodProvider.dates(actionOnWords.getWords(), Methoder.getStringArg(0, Methoder.getParameters(actionOnWords))));
+    }
 
-
-        return new ActionResponse<>(methoderMap.get(Methoder.getMethodName(actionOnWords)).performAction(actionOnWords.getWords()));
-
+    public ActionResponse<?> createResponse(ActionOnWords actionOnWords){
+        return new ActionResponse<>(methoderMap.get(Methoder.getMethodName(actionOnWords)).performAction(actionOnWords));
     }
 }

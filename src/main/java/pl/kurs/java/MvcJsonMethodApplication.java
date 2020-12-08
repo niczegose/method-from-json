@@ -10,9 +10,4 @@ public class MvcJsonMethodApplication {
     public static void main(String[] args) {
         SpringApplication.run(MvcJsonMethodApplication.class, args);
     }
-
-    @Bean()
-    public MethodService getMethodService(){
-        return new MethodService();
-    }
 }

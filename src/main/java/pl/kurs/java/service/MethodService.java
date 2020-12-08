@@ -1,7 +1,6 @@
 package pl.kurs.java.service;
 
-import lombok.AllArgsConstructor;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import pl.kurs.java.impl.MethodProvider;
 import pl.kurs.java.model.ActionOnWords;
 import pl.kurs.java.model.ActionResponse;
@@ -11,7 +10,7 @@ import javax.annotation.PostConstruct;
 import java.util.HashMap;
 import java.util.Map;
 
-@Component
+@Service
 public class MethodService {
 
     private final Map<String, Methoder<?>> methoderMap = new HashMap<>();

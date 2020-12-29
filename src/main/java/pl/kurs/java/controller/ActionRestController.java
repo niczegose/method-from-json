@@ -1,10 +1,12 @@
 package pl.kurs.java.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-import pl.kurs.java.impl.MethodProvider;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import pl.kurs.java.model.ActionOnWords;
 import pl.kurs.java.service.MethodService;
 
@@ -12,10 +14,10 @@ import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/action")
+@RequiredArgsConstructor
 public class ActionRestController {
 
-    @Autowired
-    MethodService methodService;
+    private final MethodService methodService;
 
     @GetMapping("/")
     public ResponseEntity<Object> performActionOnWords(@RequestBody @Valid ActionOnWords actionOnWords) {

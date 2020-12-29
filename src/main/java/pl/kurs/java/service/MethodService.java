@@ -1,5 +1,6 @@
 package pl.kurs.java.service;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import pl.kurs.java.impl.MethodProvider;
 import pl.kurs.java.model.ActionOnWords;
@@ -9,26 +10,24 @@ import pl.kurs.java.model.Methoder;
 import javax.annotation.PostConstruct;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 @Service
 public class MethodService {
 
     private final Map<String, Methoder<?>> methoderMap = new HashMap<>();
+    private final Set<Methoder<?>> methoders;
+
+    @Autowired
+    public MethodService(Set<Methoder<?>> methoders) {
+        this.methoders = methoders;
+    }
 
     @PostConstruct
-    public void init() {
-        methoderMap.put("palindromes", actionOnWords -> MethodProvider.palindromes(actionOnWords.getWords()));
-
-        methoderMap.put("length", actionOnWords ->
-                MethodProvider.length(actionOnWords.getWords(), Methoder.getIntArg(0, Methoder.getParameters(actionOnWords))));
-
-        methoderMap.put("anagrams", actionOnWords ->
-                MethodProvider.anagrams(actionOnWords.getWords(), Methoder.getStringArg(0, Methoder.getParameters(actionOnWords))));
-
-        methoderMap.put("longest", actionOnWords -> MethodProvider.longest(actionOnWords.getWords()));
-
-        methoderMap.put("dates", actionOnWords ->
-                MethodProvider.dates(actionOnWords.getWords(), Methoder.getStringArg(0, Methoder.getParameters(actionOnWords))));
+    private void init() {
+        for (Methoder<?> methoder: methoders) {
+            methoderMap.put(methoder.getClass().getSimpleName().toLowerCase(), methoder);
+        }
     }
 
     public ActionResponse<?> createResponse(ActionOnWords actionOnWords){

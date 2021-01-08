@@ -1,5 +1,6 @@
 package pl.kurs.java.controller.error;
 
+import org.jetbrains.annotations.NotNull;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,8 +18,10 @@ import static pl.kurs.java.controller.error.model.ValidatorErrorDto.*;
 
 @ControllerAdvice
 public class DefaultExceptionHandler extends ResponseEntityExceptionHandler {
+
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
+        //@notnull validation not for response
         ValidatorErrorDto errors = new ValidatorErrorDto(
                 createErrorList(ex)
         );

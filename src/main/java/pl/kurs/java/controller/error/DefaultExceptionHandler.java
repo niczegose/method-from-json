@@ -18,8 +18,10 @@ import static pl.kurs.java.controller.error.model.ValidatorErrorDto.*;
 
 @ControllerAdvice
 public class DefaultExceptionHandler extends ResponseEntityExceptionHandler {
+
     @Override
-    protected @NotNull ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
+    protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
+        //@notnull validation not for response
         ValidatorErrorDto errors = new ValidatorErrorDto(
                 createErrorList(ex)
         );
